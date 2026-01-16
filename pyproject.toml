@@ -25,7 +25,9 @@ dependencies = [
     "typer>=0.15.1",
     "opencv-python",
     "deepface>=0.0.81",
-    "tensorflow>=2.15.0",
+    # 修改：将 tensorflow 改为 CPU 版本（Windows 上最稳定）
+    "tensorflow-cpu>=2.15.0; platform_system == 'Windows'",
+    "tensorflow>=2.15.0; platform_system != 'Windows'",
     "tf_keras>=2.15.0",
     "web3",
     "numpy",
@@ -54,6 +56,8 @@ dds = [
     "cyclonedds==0.10.2"
 ]
 macos = ["osascript"]
+# 添加 Windows 可选依赖组（用于辅助解析）
+windows = []
 
 [dependency-groups]
 dev = [
@@ -66,6 +70,12 @@ dev = [
     "ruff>=0.9.3",
     "vulture>=2.10",
 ]
+
+# 添加 UV 特定配置来解决依赖解析问题
+[tool.uv]
+# 添加平台特定解析规则
+[uv-config]
+platform = { os = "windows", arch = "x86_64" }
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
